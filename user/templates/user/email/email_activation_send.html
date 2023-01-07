@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Вход
+{% endblock %}
+
+{% block content %}
+    <section class="container page-header">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'shop:index' %}">Главная</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'user:profile' %}">Мои покупки</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Вход</li>
+            </ol>
+        </nav>
+
+        <h1>Вход</h1>
+
+    </section>
+
+    <section class="container body-bg wrapper game-content mb-5">
+        <div class="row">
+
+            <div class="col-12">
+
+                <div class="purchase-authorize">
+
+                    <div class="purchase-authorize_icon">
+                        <i class="fas fa-envelope-open-text"></i>
+                    </div>
+
+                    <div class="purchase-authorize_header">
+                        Ссылка доступа отправлена
+                    </div>
+
+                    <div class="purchase-authorize_text">
+                        Для входа перейдите по отправленной на Email ссылке.
+                        Если письмо не пришло, пожалуйста проверьте папку «Спам», если его и там нет, то
+                        попробуйте войти ещё раз.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+{% endblock %}

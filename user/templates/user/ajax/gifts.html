@@ -1,0 +1,41 @@
+{% load static %}
+{% for gift in gifts %}
+    <table class="table table-borderless">
+        <tbody class="profile-purchase">
+        <tr>
+            <td class="profile-purchase_cover">
+                {% if gift.image %}
+                    <img src="{{ gift.image.url }}" alt="{{ gift.name }}">
+                {% else %}
+                    <img src="{% static 'img/gift-thumbnail.webp' %}" alt="{{ gift.name }}">
+                {% endif %}
+            </td>
+            <td>
+                <div class="profile-purchase_product">
+                    <div class="profile-purchase_product_name">
+                        {{ gift.gift }}
+                    </div>
+                    {% if gift.description %}
+                        <div class="profile-purchase_product_info">
+                            {{ gift.description }}
+                        </div>
+                    {% endif %}
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{% endfor %}
+{% if gifts.has_next %}
+    <div class="col-12 row">
+        <div class="col">
+            <div class="catalog-more" style="padding: 0">
+                <button id="itemsMore" data-get="page2" data-label="gifts" data-next-page="{{ gifts.next_page_number }}"
+                        type="button"
+                        class="btn btn-sm btn-primary items-more" style="padding: 7px 15px"><i
+                        class="fas fa-sync-alt fa-spin d-none"></i>Показать ещё
+                </button>
+            </div>
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block description %}
+    Гарантии {{ site_name }}. Здесь Вы можете ознакомиться с гарантиями магазина.
+{% endblock %}
+
+{% block title %}
+    Гарантии {{ site_name }}
+{% endblock %}
+
+{% block content %}
+    <section class="container page-header">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'shop:index' %}">Главная</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Гарантии</li>
+            </ol>
+        </nav>
+
+        <h1>Гарантии</h1>
+
+    </section>
+
+    <section class="container wrapper game-content">
+        <div class="row">
+            {% if config.YOUTUBE %}
+                <div class="col-12 col-lg-6 col-xl-4 pb-3">
+                    <div class="garant-item">
+                        <div class="garant-item-cover">
+                            <img src="{{ MEDIA_URL }}{{ config.YOUTUBE_LOGO }}" alt="{{ site_name }}">
+                        </div>
+                        <div class="garant-item-data">
+                            <div class="garant-item-data_header">
+                                {{ config.YOUTUBE_TITLE }}
+                            </div>
+                            <div class="garant-item-data_text">
+                                {{ config.YOUTUBE_TEXT }}
+                                <div class="mt-4">
+                                    <div class="index-blogger-quote_buttons">
+                                        <a href="{{ config.YOUTUBE_URL }}" class="btn btn-youtube"
+                                           title="Ссылка на YouTube" target="_blank"><i
+                                                class="fab fa-youtube"></i>YouTube</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="col-12 col-lg-6 col-xl-4 pb-3">
+                <div class="garant-item">
+                    <div class="garant-item-cover">
+                        <div class="garant-item-cover_icon">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                    </div>
+                    <div class="garant-item-data">
+                        <div class="garant-item-data_header">
+                            Способы оплаты
+                        </div>
+                        <div class="garant-item-data_text">
+                            Вы можете оплатить покупку любым удобным способом: Банковская карта, Электронные деньги т.д.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 col-xl-4 pb-3">
+                <div class="garant-item">
+                    <div class="garant-item-cover">
+                        <div class="garant-item-cover_icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                    </div>
+                    <div class="garant-item-data">
+                        <div class="garant-item-data_header">
+                            Поддержка
+                        </div>
+                        <div class="garant-item-data_text">
+                            При возникновении любых затруднений обращайтесь в нашу службу поддержки.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 col-xl-4 pb-3">
+                <div class="garant-item">
+                    <div class="garant-item-cover">
+                        <div class="garant-item-cover_icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                    </div>
+                    <div class="garant-item-data">
+                        <div class="garant-item-data_header">
+                            Гарантия на товары
+                        </div>
+                        <div class="garant-item-data_text">
+                            Покупая в нашем магазине, Вы можете быть уверены в работоспособности товара. Весь товар
+                            проходит проверку.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if is_gifts %}
+                <div class="col-12 col-lg-6 col-xl-4 pb-3">
+                    <div class="garant-item">
+                        <div class="garant-item-cover">
+                            <div class="garant-item-cover_icon">
+                                <i class="fas fa-gift"></i>
+                            </div>
+                        </div>
+                        <div class="garant-item-data">
+                            <div class="garant-item-data_header">
+                                Подарок за покупку
+                            </div>
+                            <div class="garant-item-data_text">
+                                У нас никто не остаётся без подарка после покупки. За все время выдано уже более 200 000
+                                подарков.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="col-12 col-lg-6 col-xl-4 pb-3">
+                <div class="garant-item">
+                    <div class="garant-item-cover">
+                        <div class="garant-item-cover_icon">
+                            <i class="fas fa-envelope-open-text"></i>
+                        </div>
+                    </div>
+                    <div class="garant-item-data">
+                        <div class="garant-item-data_header">
+                            Моментальная доставка
+                        </div>
+                        <div class="garant-item-data_text">
+                            После оплаты вы моментально получаете товар, забрать вы сможете его на странице заказа.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+{% endblock %}

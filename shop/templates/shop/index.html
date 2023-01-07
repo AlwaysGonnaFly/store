@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load shop_tags %}
+
+{% block title %}
+    {{ site_name }}
+{% endblock %}
+
+{% block content %}
+    <section class="container">
+        <div class="row">
+            <div class="index-warning-msg">
+                <i class="fas fa-exclamation-circle mr-1"></i>
+                {{ config.PANEL_TEXT }}
+            </div>
+        </div>
+    </section>
+    <section id="indexCatalog" class="container body-bg wrapper">
+        <ul id="catalog" class="nav nav-tabs">
+            <li class="nav-item">
+                <a data-category="" class="nav-link {% if not request.GET.category %} active {% endif %}">
+                    <i class="fas"></i>Все
+                </a>
+            </li>
+            {% for category in categories %}
+                <li class="nav-item">
+                    <a data-category="{{ category.id }}"
+                       class="nav-link {% if request.GET.category|floatformat == category.id|floatformat %} active {% endif %}">
+                        <i class="fas {% if category.icon %} {{ category.icon }} {% endif %}"></i>{{ category.name }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+        <div id="catalogContent" class="tab-content">
+            <div class="tab-pane fade show active">
+                {% include 'shop/ajax/subcategories.html' %}
+
+                <div class="row mt-3 mb-2">
+                    <div class="col-12 col-lg">
+                        <div class="index-game-series">
+                            <div class="index-game-series_item"
+                                 style="background-color: rgba(0, 0, 0, 0); box-shadow: none"></div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-auto">
+                        <div @click="toggleFilterShown" class="index-game-filter-toggle"
+                             :class="{ shown : is_filter_shown }">
+                            <i class="fas fa-times" v-if="is_filter_shown"></i>
+                            <i class="fas fa-search" v-else=""></i>
+                            Поиск
+                        </div>
+                    </div>
+                </div>
+                <form id="goodsFilter" method="GET" action="{% url 'shop:index' %}"
+                      class="row mt-3 index-games-list-container">
+                    {{ form.category }}
+                    {{ form.subcategory }}
+                    {{ form.o }}
+                    {{ form.p3 }}
+                    {{ form.p4 }}
+
+                    <div class="catalog-filter d-none" style="display: none;" :class="{'d-flex' : is_filter_shown }"
+                         v-show="is_filter_shown"
+                         v-cloak="">
+
+                        <div class="catalog-filter-item">
+                            <div class="catalog-filter-search">
+                                <div class="catalog-filter-item-label">Сначала показывать</div>
+                                <div class="catalog-filter-sorting">
+                                    {% for k, v in ordering.items %}
+                                        <span class="catalog-filter-sorting-item {% if request.GET.o == k %} selected {% elif k == '-time' and not request.GET.o %} selected {% endif %}"
+                                              data-ordering="{{ k }}">{{ v }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="catalog-filter-item">
+                            <div class="catalog-filter-search">
+                                <div class="catalog-filter-item-label">Поиск по названию</div>
+                                <div class="form-group mb-0">
+                                    {{ form.q }}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if param4 %}
+                            <div class="catalog-filter-item">
+                                <div class="catalog-filter-selector">
+                                    <div class="catalog-filter-item-label">Активация</div>
+                                    <div class="catalog-filter-selector_list">
+                                        {% for p in param4 %}
+                                            <div data-form-name="p4" data-selector="{{ p.id }}" class="catalog-filter-selector_list__item {% if p.id in request.GET.p4|get_ids_of_good_params %} selected {% endif %}">
+                                                {% if p.image %}
+                                                    <span class="activation-svg mr-2">
+                                                    <div style="background-image: url({{ p.image.url }})"
+                                                         class="activation-svg_icon original-color">
+                                                </div>
+                                                    </span>
+                                                {% endif %}
+                                                {{ p.name }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if param3 %}
+                            <div class="catalog-filter-item">
+                                <div class="catalog-filter-selector">
+                                    <div class="catalog-filter-item-label">Жанры</div>
+                                    <div class="catalog-filter-selector_list">
+                                        {% for p in param3 %}
+                                            <div data-form-name="p3" data-selector="{{ p.id }}" class="catalog-filter-selector_list__item {% if p.id in request.GET.p3|get_ids_of_good_params %} selected {% endif %}">
+                                                {{ p.name }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    {% include 'shop/ajax/goods.html' %}
+
+                    <div class="col-12 goods-loading" style="display: none;">
+                        <div class="w-100 d-flex justify-content-center align-items-center py-5"><i
+                                class="fas fa-spinner fa-spin"></i></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}

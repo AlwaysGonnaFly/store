@@ -1,0 +1,18 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrastyle %}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/login.css" %}">
+{% endblock %}
+
+{% block content %}
+    <div id="content-main">
+
+        {% if not user.is_authenticated %}
+            Необходимо войти на главной <a href="{% url 'user:auth' %}">странице</a> сайта.
+        {% elif not user.is_superuser or user.is_superuser and not user.is_staff %}
+            Недостаточно прав для использования панели управления.
+        {% endif %}
+
+    </div>
+{% endblock %}

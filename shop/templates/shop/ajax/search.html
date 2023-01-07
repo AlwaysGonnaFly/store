@@ -1,0 +1,15 @@
+{% for good in goods %}
+    <a class="search-result-item" href="{{ good.get_absolute_url }}">
+        <div class="search-result-item_cover">
+            <img alt="{{ good.name }}" src="{{ good.thumbnail.url }}">
+        </div>
+        <div class="search-result-item_info">
+            <div class="search-result-item_info__name">
+                {{ good.name }}
+            </div>
+            <div class="search-result-item_info__type">
+                {{ good.subcategory.name }}
+            </div>
+        </div>
+    </a>
+{% endfor %}

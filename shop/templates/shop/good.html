@@ -1,0 +1,282 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Купить {{ good.name }}
+{% endblock %}
+
+{% block description %}
+    В нашем магазине Вы можете приобрести {{ good.name }} с гарантией. У нас действуют
+    постоянные скидки и бонусы для наших покупателей.
+{% endblock %}
+
+{% block content %}
+    <section class="container page-header game-page {% if good.background %} page-header_bg {% endif %}">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'shop:index' %}">Главная</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Купить {{ good.name }}</li>
+            </ol>
+        </nav>
+
+        <h1>Купить {{ good.name }}</h1>
+
+        <div class="row">
+            <div class="col">
+                <div class="index-warning-msg">
+                    <i class="fas fa-exclamation-circle mr-1"></i>
+                    {{ config.PANEL_TEXT }}
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="container body-bg wrapper game-content">
+        <div class="row">
+
+            <div class="col-12 col-md-auto game-content-cover-wrapper">
+                <div class="game-content-cover">
+                    {% if good.is_hit %}
+                        <div class="product-card_tag product-card_tag__hit">hit</div>
+                    {% endif %}
+                    <img src="{{ good.thumbnail.url }}" class="game-content-cover_img"
+                         alt="{{ good.name }}">
+                </div>
+
+                <div class="game-content-help">
+                    <div class="game-content-help_label">Помощь</div>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="{% url 'shop:support' %}" target="_blank">Как активировать?</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'shop:how' %}" target="_blank">Как купить?</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-12 col-md pb-md-3 px-md-3">
+                {% with subcategory_name=config.SUBCATEGORY_NAME param1=config.PARAM1 param2=config.PARAM2 param3=config.PARAM3 param4=config.PARAM4 %}
+                    <div class="game-content-characteristics">
+                        {% if good.subcategory %}
+                            <div class="game-content-characteristics-item">
+                            <span class="game-content-characteristics-charatceristic">
+                                {% if subcategory_name %}
+                                    {{ subcategory_name }}
+                                {% else %}
+                                    Подкатегория
+                                {% endif %}
+                            </span>
+                                <span class="game-content-characteristics-charatceristic">
+                            <div class="game-type">{{ good.subcategory.name }}</div>
+                        </span>
+                            </div>
+                        {% endif %}
+                        {% if good.param4.count %}
+                            <div class="game-content-characteristics-item">
+                            <span class="game-content-characteristics-charatceristic">
+                                {% if param4 %}
+                                    {{ param4 }}
+                                {% else %}
+                                    Параметр4
+                                {% endif %}
+                            </span>
+                                <span class="game-content-characteristics-charatceristic">
+                                    {% for info1 in good.param4.all %}
+                                        <span class="mr-1 d-flex align-items-center">
+                                            {% if info1.image %}
+                                                <span class="activation-svg">
+                                                  <div class="activation-svg_icon original-color"
+                                                       style="background-image: url({{ info1.image.url }})"></div>
+                                                </span>
+                                            {% endif %}
+                                            {{ info1.name }}{% if info1 != good.param4.last %},{% endif %}
+                                        </span>
+                                    {% endfor %}
+                            </span>
+                            </div>
+                        {% endif %}
+                        {% if good.param1 %}
+                            <div class="game-content-characteristics-item">
+                        <span class="game-content-characteristics-charatceristic">
+                            {% if param1 %}
+                                {{ param1 }}
+                            {% else %}
+                                Параметр1
+                            {% endif %}
+                        </span>
+                                <span class="game-content-characteristics-charatceristic">{{ good.param1|date:'d.m.Y' }}</span>
+                            </div>
+                        {% endif %}
+                        {% if good.param3.count %}
+                            <div class="game-content-characteristics-item">
+                            <span class="game-content-characteristics-charatceristic">
+                                {% if param3 %}
+                                    {{ param3 }}
+                                {% else %}
+                                    Параметр3
+                                {% endif %}
+                            </span>
+                                <span class="game-content-characteristics-charatceristic">{{ good.get_param3_of_str }}</span>
+                            </div>
+                        {% endif %}
+                        {% if good.param2 %}
+                            <div class="game-content-characteristics-item">
+                            <span class="game-content-characteristics-charatceristic">
+                                {% if param2 %}
+                                    {{ param2 }}
+                                {% else %}
+                                    Параметр2
+                                {% endif %}
+                            </span>
+                                <span class="game-content-characteristics-charatceristic">{{ good.param2 }}</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endwith %}
+                <div class="game-content-screenshots my-3">
+                    <div class="row">
+                        {% if good.video %}
+                            <div class="col-12 col-md-6 pr-md-0">
+                                <a href="{{ good.video }}"
+                                   data-fancybox="screenshots" class="game-content-screenshots-video"
+                                   title="Видео {{ good.name }}">
+                                    <img src="{{ good.video_preview.url }}" alt="Превью для видео {{ good.name }}"
+                                         loading="lazy">
+                                    <span class="game-content-screenshots-video_btn">
+                  <svg width="32" height="32" viewbox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle
+                          cx="16" cy="16" r="16" fill="var(--gray-dark)"></circle><path
+                          d="M21.5 15.134C22.1667 15.5189 22.1667 16.4811 21.5 16.866L14 21.1962C13.3333 21.5811 12.5 21.0999 12.5 20.3301L12.5 11.6699C12.5 10.9001 13.3333 10.4189 14 10.8038L21.5 15.134Z"
+                          fill="var(--gray)"></path></svg>
+                  <span class="game-content-screenshots-video_btn__text">PLAY</span>
+                </span>
+                                </a>
+                            </div>
+                        {% endif %}
+                        <div class="col-12 col-md-6">
+                            <div class="game-content-screenshots-item-grid">
+                                {% if good.images.count %}
+                                    {% for image in good.images.all %}
+                                        <a href="{{ image.image.url }}"
+                                           title="{{ good.name }}"
+                                           data-fancybox="screenshots" class="game-content-screenshots-item"><img
+                                                src="{{ image.image.url }}"
+                                                alt="{{ good.name }}"></a>
+                                    {% endfor %}
+                                {% else %}
+                                    <a style="width: 200px"></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if good.description %}
+                    {% autoescape off %}
+                        <div class="game-content-description">
+                            {{ good.description }}
+                        </div>
+                    {% endautoescape %}
+                {% endif %}
+
+                {% if good.category.manual and good.display_manual %}
+                    <div class="game-content-instruction">
+                        <div class="game-content-instruction_label">Инструкция</div>
+                        <div class="game-content-instruction_content">
+                            <ul>
+                                {% autoescape off %}
+                                    {% for i in good.category.get_manual_as_list %}
+                                        <li>{{ i }}</li>
+                                    {% endfor %}
+                                {% endautoescape %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+
+            <div class="col-12 col-md-auto">
+                <div class="game-content-buy">
+                    <div class="game-content-buy_prices">
+                        {% if good.discounted_price %}
+                            <div class="game-content-buy_prices__discount">
+                                <div class="game-content-buy_prices__discount__old">
+                                    {{ good.price }} ₽
+                                </div>
+                                <div class="game-content-buy_prices__discount__percent">
+                                    -{{ good.get_discount_in_percent }}%
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="game-content-buy_prices__actual">
+                            <div class="game-content-buy_prices__actual__price">
+                                {% if good.discounted_price %}
+                                    <span>{{ good.discounted_price }} ₽</span>
+                                {% else %}
+                                    <span>{{ good.price }} ₽</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if good.in_stock %}
+                        <div class="game-content-buy_stock">
+                            <span class="game-content-buy_stock__label">Наличие:</span>
+                            <i class="fas fa-battery-three-quarters text-success"></i> В наличии
+                        </div>
+                        <form action="{% url 'shop:purchase' good.pk %}" class="buy-from" method="get">
+                            <button type="submit" class="btn btn-lg btn-danger w-100"><i
+                                    class="fas fa-shopping-cart"></i>Купить
+                            </button>
+                        </form>
+                    {% else %}
+                        <div class="game-content-buy_stock">
+                            <span class="game-content-buy_stock__label">Наличие:</span>
+                            <i class="fas fa-battery-empty text-danger"></i> Нет в наличии
+                        </div>
+                    {% endif %}
+
+                </div>
+
+                <div class="game-benefits">
+                    <div class="game-benefits_label">
+                        <img class="game-benefits_label__logo" src="
+                                {% if logo %}{{ MEDIA_URL }}{{ logo }}{% else %}{% static 'img/logo.webp' %}{% endif %}"
+                             alt="{{ site_name }} гарантирует">
+                        <span class="game-benefits_label__quote">Гарантирую!</span>
+                    </div>
+                    <div class="game-benefits_item game-benefits_item__delivery">
+                        <i class="fas fa-envelope-open-text"></i>Моментальную доставку
+                    </div>
+                    <div class="game-benefits_item game-benefits_item__garant">
+                        <i class="fas fa-shield-alt"></i><a href="{% url 'shop:guarantees' %}" title="Гарантии"
+                                                            target="_blank">Качество</a>
+                        товара
+                    </div>
+                    <div class="game-benefits_item game-benefits_item__support">
+                        <i class="fas fa-headset"></i><a href="{% url 'shop:support' %}" title="Поддержка"
+                                                         target="_blank">Поддержку</a>
+                        после покупки
+                    </div>
+                    {% if is_gifts %}
+                        <div class="game-benefits_item game-benefits_item__gift">
+                            <i class="fas fa-gift"></i>Подарок от «{{ site_name }}»
+                        </div>
+                    {% endif %}
+                </div>
+
+
+            </div>
+
+        </div>
+    </section>
+
+    {% if good.background %}
+        <div class="game-background" style="background-image: url({{ good.background.url }})">
+            <div class="game-background_shade" id="gameBackgroundShade" data-color="{{ good.background_color }}"></div>
+        </div>
+    {% endif %}
+{% endblock %}

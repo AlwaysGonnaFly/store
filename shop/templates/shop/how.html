@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block description %}
+    Как купить
+{% endblock %}
+
+{% block title %}
+    Как купить
+{% endblock %}
+
+{% block content %}
+    <section class="container page-header">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'shop:index' %}">Главная</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Как купить</li>
+            </ol>
+        </nav>
+
+        <h1>Как купить</h1>
+
+    </section>
+
+    <section class="container body-bg wrapper game-content">
+        <div class="row">
+
+            <div class="col-12">
+
+                <div class="how-step">
+                    <div class="how-step_count">
+                        1 шаг
+                    </div>
+                    <div class="how-step_heading">
+                        Выбираем интересующий вас товар на главной странице сайта
+                    </div>
+                    <div class="how-step_img">
+                        <img src="{% static 'img/how/step-1.jpg' %}" alt="Выбор товара">
+                    </div>
+                </div>
+
+                <div class="how-step">
+                    <div class="how-step_count">
+                        2 шаг
+                    </div>
+                    <div class="how-step_heading">
+                        На странице товара нажимаем на кнопку «Купить»
+                    </div>
+                    <div class="how-step_img">
+                        <img src="{% static 'img/how/step-2.jpg' %}" alt="Кнопка «Купить»">
+                    </div>
+                </div>
+
+                <div class="how-step">
+                    <div class="how-step_count">
+                        3 шаг
+                    </div>
+                    <div class="how-step_heading">
+                        Выбираем удобный способы оплаты и нажимаем «Оформить покупку»
+                    </div>
+                    <div class="how-step_img">
+                        <img src="{% static 'img/how/step-3.jpg' %}" alt="Оформить покупку">
+                    </div>
+                </div>
+
+                <div class="how-step">
+                    <div class="how-step_count">
+                        4 шаг
+                    </div>
+                    <div class="how-step_heading">
+                        В появившемся окне нажимаем «Перейти к оплате» и оплачиваем покупку в открывшейся вкладке
+                    </div>
+                    <div class="how-step_img">
+                        <img src="{% static 'img/how/step-4.jpg' %}" alt="Перейти к оплате">
+                    </div>
+                </div>
+
+                <div class="how-step">
+                    <div class="how-step_count">
+                        5 шаг
+                    </div>
+                    <div class="how-step_heading">
+                        Поздравляем, Вы успешно совершили покупку!
+                    </div>
+                    <div class="how-step_img">
+                        <img src="{% static 'img/how/step-5.jpg' %}" alt="Успешно">
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Поддержка
+{% endblock %}
+
+{% block description %}
+    Поддержка
+{% endblock %}
+
+{% block content %}
+    <section class="container page-header">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'shop:index' %}">Главная</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Поддержка</li>
+            </ol>
+        </nav>
+
+        <h1>Поддержка</h1>
+
+    </section>
+    {% with contact1=config.CONTACT1 contact2=config.CONTACT2 %}
+        <section class="container body-bg wrapper game-content">
+            <div class="row">
+
+                <div class="col-12 col-xl-8">
+                    <div class="support-contact-text">
+                        <div class="support-contact-text__heading">
+                            Контакты
+                        </div>
+                        <div class="support-contact-text__text">
+                            {{ config.CONTACT_DESCRIPTION }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-xl-4">
+                    <div class="support-contact">
+                        {% if contact1 or contact2 %}
+                            <div class="support-contact-item">
+                                <div class="support-contact-item__heading">
+                                    <div class="support-contact-item__heading_icon">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    Поддержка
+                                </div>
+                                {% if contact1 %}
+                                    <div class="support-contact-item__contact">
+                                        <div class="support-contact-item__contact__label">
+                                            {{ config.CONTACT1_LABEL }}:
+                                        </div>
+                                        <div class="support-contact-item__contact__data">
+                                            <a href="{{ config.CONTACT1_URL }}"
+                                               target="_blank">{{ contact1 }}</a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% if contact2 %}
+                                    <div class="support-contact-item__contact">
+                                        <div class="support-contact-item__contact__label">
+                                            {{ config.CONTACT2_LABEL }}:
+                                        </div>
+                                        <div class="support-contact-item__contact__data">
+                                            <a href="{{ config.CONTACT2_URL }}"
+                                               target="_blank">{{ contact2 }}</a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    {% endwith %}
+{% endblock %}

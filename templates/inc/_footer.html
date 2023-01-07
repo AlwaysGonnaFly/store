@@ -1,0 +1,95 @@
+{% load static %}
+{% get_media_prefix as MEDIA_URL %}
+
+<footer>
+    <section class="container-fluid footer-stat">
+        <div class="container">
+            <div class="row">
+                <div class="col footer-stat_metrica">
+                    <div class="footer-stat_metrica__num">{% if today_users_count == -1 %}
+                        {{ TODAY_USERS_COUNT }} {% else %} {{ today_users_count }} {% endif %}</div>
+                    <div class="footer-stat_metrica__name">Сегодня пользователей</div>
+                </div>
+                <div class="col footer-stat_metrica">
+                    <div class="footer-stat_metrica__num">{% if users_count == -1 %} {{ USERS_COUNT }} {% else %}
+                        {{ users_count }} {% endif %}</div>
+                    <div class="footer-stat_metrica__name">Всего пользователей</div>
+                </div>
+                <div class="col footer-stat_metrica">
+                    <div class="footer-stat_metrica__num">{% if purchases_count == -1 %}
+                        {{ PURCHASES_COUNT }} {% else %} {{ purchases_count }} {% endif %}</div>
+                    <div class="footer-stat_metrica__name">Всего покупок</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% if is_gifts %}
+        <a class="index-ba-give" href="{% url 'shop:gift' %}"></a>
+    {% endif %}
+
+    <section class="container-fluid footer-footer">
+        <section class="container">
+            <div class="row">
+                <div class="col-12 col-md-auto">
+                    <div class="footer-footer_brand">
+                        <div class="footer-footer_brand__logo">
+                            <img src="{% if logo %}{{ MEDIA_URL }}{{ logo }}{% else %}{% static 'img/logo.webp' %}{% endif %}"
+                                 alt="{{ site_name }}">
+                        </div>
+                        <div class="footer-footer_brand__shop">
+                            <div class="footer-footer_brand__shop__name">
+                                {{ site_name }}
+                            </div>
+                            <div class="footer-footer_brand__shop__url">
+                                {{ host }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md">
+                    <div class="footer-footer_links">
+                        {% if is_gifts %}
+                            <div class="footer-footer_links__link">
+                                <a href="{% url 'shop:gift' %}">Подарки</a>
+                            </div>
+                        {% endif %}
+                        <div class="footer-footer_links__link">
+                            <a href="{% url 'shop:how' %}">Как купить</a>
+                        </div>
+                        <div class="footer-footer_links__link">
+                            <a href="{% url 'shop:guarantees' %}">Гарантии</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5 mb-1">
+                <div class="col">
+                    <div class="footer-footer_links-bottom">
+                        <div class="footer-footer_links-bottom__link">
+                            <a href="{% url 'shop:terms' %}" target="_blank" title="Пользовательское соглашение">Пользовательское
+                                соглашение</a>
+                        </div>
+                        <div class="footer-footer_links-bottom__link">
+                            <a href="{% url 'shop:confidentiality' %}" target="_blank"
+                               title="Политика конфиденциальности">Политика
+                                конфиденциальности</a>
+                        </div>
+                        <div class="footer-footer_links-bottom__link">
+                            <a href="{% url 'shop:privacy' %}" target="_blank" title="Обработка персональных данных">Обработка
+                                персональных данных</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-auto">
+                    <div class="footer-footer_sup">
+
+                        <a href="{% url 'shop:support' %}">Контакты</a>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </section>
+</footer>

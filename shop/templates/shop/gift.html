@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Подарки
+{% endblock %}
+
+{% block description %}
+    Подарки за покупки
+{% endblock %}
+
+{% block content %}
+
+    <section class="container page-header">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'shop:index' %}">Главная</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Подарки</li>
+                </ol>
+            </nav>
+            <h1>Подарки</h1>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="row">
+
+            <div class="col-12">
+
+                <div class="wrapper-container pb-5">
+
+                    <div class="gift-hello">
+                        <div class="gift-hello-wrapper">
+                            <div class="gift-hello_label">
+                                Получите свой подарок!
+                            </div>
+                            <div class="gift-hello_text">
+                                Уважаемые покупатели, здесь вы можете получить отличный подарок, единственное условие —
+                                вы уже совершали хотя бы одну покупку!
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="gift-steps-view">
+                            <div class="gift-steps-view-wrapper">
+                                <div class="gift-steps-view-item active">1 шаг</div>
+                                <div class="gift-steps-view-item last">Успех!</div>
+                            </div>
+                        </div>
+
+                        <div class="gift-steps">
+                            <div class="gift-steps-step">
+                                <b>Получить подарок</b>
+                                <form id="giftForm" method="post" action="{% url 'shop:gift' %}">
+                                    {% csrf_token %}
+                                    <input name="order" type="text" class="form-control my-3"
+                                           placeholder="Номер заказа">
+                                    {% if not user.is_authenticated %}
+                                        <input name="email" type="text" class="form-control my-3"
+                                               placeholder="Ваша почта">
+                                    {% endif %}
+                                    <button type="submit" class="btn btn-lg btn-primary mt-3"><i
+                                            class="fas fa-spin fa-sync-alt d-none"></i>Отправить
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

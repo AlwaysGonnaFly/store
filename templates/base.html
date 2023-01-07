@@ -1,0 +1,62 @@
+{% load static %}
+{% get_media_prefix as MEDIA_URL %}
+
+
+{% with is_gifts=config.GIFTS today_users_count=config.TODAY_USERS_COUNT users_count=config.USERS_COUNT purchases_count=config.PURCHASES_COUNT site_name=config.SITE_NAME logo=config.LOGO_IMAGE host=request.get_host %}
+    <!doctype html>
+    <html lang="ru">
+    <head data-img-lazy="12">
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="{% block description %} {% endblock %}">
+
+        <!-- styles -->
+        <link rel="stylesheet" href="{% static 'css/app.css' %}">
+        <link rel="stylesheet" href="{% static 'css/themes/black.css' %}">
+
+        <!-- fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+
+        <title>{% block title %} {% endblock %}</title>
+        <link rel="shortcut icon"
+              href="{% if logo %}{{ MEDIA_URL }}{{ logo }}{% else %}{% static 'img/logo.webp' %}{% endif %}">
+
+    </head>
+    <body background="{% static 'img/background.webp' %}">
+
+    {% include 'inc/_header.html' %}
+
+    <main role="main">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    {% include 'inc/_footer.html' %}
+
+    <script src="{% static 'js/app.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+            integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+    {% if messages %}
+        <script>
+            {% for message in messages %}
+                new Toast({
+                    title: false,
+                    text: '{{ message }}',
+                    theme: 'default',
+                    autohide: true,
+                    interval: 2000,
+                });
+            {% endfor %}
+        </script>
+    {% endif %}
+
+    {% block js %}
+    {% endblock %}
+
+    </body>
+    </html>
+{% endwith %}

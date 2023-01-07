@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if form.errors %}
+        Ошибка
+    {% else %}
+        Мои покупки
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <section class="container page-header">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'shop:index' %}">Главная</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Мои покупки</li>
+                </ol>
+            </nav>
+            <h1>Мои покупки</h1>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="row">
+            <div class="col-12 col-lg-3">
+
+                <div class="wrapper-container">
+                    <div class="profile-info">
+                        <div class="profile-info-userpic">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="profile-info-email">
+                            <a>{{ user.email }}</a>
+                        </div>
+                        <div class="profile-info-balance">
+                            <div class="profile-info-balance_label">
+                                Баланс
+                            </div>
+                            <div class="profile-info-balance_value">
+                                {{ user.balance }} ₽
+                            </div>
+                            <div class="profile-info-balance_deposit">
+                                <button class="btn btn-primary deposit_balance_modal_open">Пополнить
+                                </button>
+                            </div>
+                            {% if user.is_superuser %}
+                                <form action="{% url 'user:profile' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="profile-purchase_product_name">
+                                        <button name="check_payments" class="btn btn-sm btn-danger" type="submit">
+                                            Проверить все платежи
+                                        </button>
+                                    </div>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-none d-lg-block">
+                    <div class="col text-center">
+                        <div class="profile-info-logout">
+                            <form action="{% url 'user:deauth' %}" method="post">
+                                {% csrf_token %}
+                                <button class="deauth-btn" type="submit"><span>Выйти</span></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-lg-9">
+
+                <div class="wrapper-container">
+                    <ul class="nav nav-tabs" id="profile">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-tab="purchases">Покупки</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-tab="gifts"><i class="fas fa-gift mr-2"></i>Подарки</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="profileContent">
+                        <div class="tab-pane fade show active" id="purchases">
+                            {% if purchases %}
+                                {% include 'user/ajax/purchases.html' %}
+                            {% else %}
+                                <div class="empty">
+                                    Здесь ничего нет, пока что.
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="tab-pane fade" id="gifts">
+                            {% if gifts %}
+                                {% include 'user/ajax/gifts.html' %}
+                            {% else %}
+                                <div class="empty">
+                                    <div class="profile-empty-gifts-info">
+                                        <div class="profile-empty-gifts-info_icon">
+                                            <i class="fas fa-gift mr-2"></i>
+                                        </div>
+                                        <div class="profile-empty-gifts-info_text">
+                                            Получите свой первый подарок, совершив покупку или пополнение баланса.
+                                            Забрать
+                                            подарок можно на странице <a href="{% url 'shop:gift' %}"
+                                                                         target="_blank" title="Подарки">«Подарки»</a>.
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="deposit_balance_modal">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <form action="{% url 'user:profile' %}" method="post" class="modal-content" id="deposit_balance_form">
+                {% csrf_token %}
+                <input type="hidden" name="deposit_balance">
+                {{ form.method }}
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <div class="purchase-step-heading my-0">
+                            <span class="purchase-step-heading_num">₽</span>
+                            Введите сумму пополнения баланса
+                        </div>
+                    </h5>
+                    <button type="button" class="close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="deposit-balance-progress">
+                            <div class="deposit-balance-progress_wrapper">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-body" id="deposit_balance">
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="d-flex justify-content-center">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="{{ form.amount.id_for_label }}">Сумма пополнения<small
+                                                class="ml-2 text-muted">Минимум 100
+                                            ₽</small></label>
+                                        {{ form.amount }}
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <div class="row">
+                                <div class="col-6 col-lg-4 col-xl-4 mb-3">
+                                    <div class="purchase-paymethod selected" data-payment="qiwi">
+                                        <div class="purchase-paymethod_logo"><img
+                                                src="{% static 'img/paylogo-qiwi.webp' %}"
+                                                alt="QIWI">
+                                        </div>
+                                        <div class="purchase-paymethod_div">
+                                            <div class="purchase-paymethod_div__name">QIWI</div>
+                                            <div class="purchase-paymethod_div__info">Без комиссии</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-4 col-xl-4 mb-3">
+                                    <div class="purchase-paymethod" data-payment="yoomoney">
+                                        <div class="purchase-paymethod_logo"><img
+                                                src="{% static 'img/paylogo-yumoney-3.webp' %}"
+                                                alt="YooMoney">
+                                        </div>
+                                        <div class="purchase-paymethod_div">
+                                            <div class="purchase-paymethod_div__name">YooMoney</div>
+                                            <div class="purchase-paymethod_div__info">Без комиссии</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <div class="d-flex flex-row align-items-center w-100 px-2 justify-content-end">
+                        <button type="submit" class="btn btn-primary">Пополнить</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

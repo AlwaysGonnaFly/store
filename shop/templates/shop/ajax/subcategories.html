@@ -1,0 +1,12 @@
+{% if subcategories %}
+    <ul id="goodsCategories" class="nav nav-tabs nav-tabs-button">
+        {% for subcategory in subcategories %}
+            <li class="nav-item nav-item-button">
+                <button class="nav-link {% if request.GET.subcategory == subcategory.id|floatformat %} active {% endif %}" data-subcategory="{{ subcategory.id }}">
+                    {% if subcategory.icon %}
+                        <i class="fas {{ subcategory.icon }}"></i> {% endif %}{{ subcategory.name }}
+                </button>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

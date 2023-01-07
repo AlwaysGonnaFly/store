@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% get_media_prefix as MEDIA_URL %}
+
+{% block title %}
+    Вход
+{% endblock %}
+
+{% block content %}
+    <section class="container page-header">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'shop:index' %}">Главная</a></li>
+                <li class="breadcrumb-item"><a href="auth.html">Мои покупки</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Вход</li>
+            </ol>
+        </nav>
+
+        <h1>Вход</h1>
+
+    </section>
+
+    <section class="container body-bg wrapper game-content mb-5">
+        <div class="row">
+
+            <div class="col-12">
+
+                <div class="purchase-authorize">
+
+                    <div class="purchase-authorize_header">
+                        <div class="index-blogger-quote">
+                            <img src="{% if logo %}{{ MEDIA_URL }}{{ logo }}{% else %}{% static 'img/logo.webp' %}{% endif %}" class="index-blogger-quote_logo"
+                                 alt="{{ site_name }}">
+                            <div class="index-blogger-quote_quote">Нужно войти</div>
+                        </div>
+                    </div>
+
+                    <div class="purchase-authorize_text">
+                        Введите свой email, на который будет отправлена ссылка доступа
+                    </div>
+
+                    <form class="purchase-authorize_form" action="{% url 'user:auth' %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="email">Email</label>
+
+                            {% if form.email.errors %}
+                                {% render_field form.email class+='is-invalid' %}
+                                <span class="error invalid-feedback">Введите правильный адрес электронной почты.</span>
+                            {% else %}
+                                {{ form.email }}
+                            {% endif %}
+
+                            <button type="submit" class="btn btn-lg btn-primary w-100 mt-4">Отправить ссылку</button>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+{% endblock %}

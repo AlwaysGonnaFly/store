@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ good.name }} - оформление покупки
+{% endblock %}
+
+{% block content %}
+    <div>
+        <section class="container page-header">
+
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'shop:index' %}">Главная</a></li>
+                    <li class="breadcrumb-item"><a href="{{ good.get_absolute_url }}">{{ good.name }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Оформление покупки</li>
+                </ol>
+            </nav>
+
+            <h1>Оформление покупки</h1>
+
+        </section>
+
+        <section class="container body-bg wrapper mb-5">
+            <div class="row">
+                <div class="col-12 col-md-3">
+
+                    <div class="purchase-info">
+                        <div class="purchase-info_cover">
+                            <img src="{{ good.thumbnail.url }}"
+                                 class="purchase-info_cover__img" alt="{{ good.name }}">
+                        </div>
+                        <div class="purchase-info_product">
+                            <div class="purchase-info_product__name">{{ good.name }}</div>
+                            {% if good.subcategory %}
+                                <div class="purchase-info_product__info">
+                                    {{ good.subcategory.name }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="purchase-form-prices">
+                            <div class="purchase-form-prices-row {% if good.discounted_price %} oldprice {% endif %}">
+                                <div class="purchase-form-prices-row__label">Цена</div>
+                                <div class="purchase-form-prices-row__value">
+                                    {{ good.price }} ₽
+                                </div>
+                            </div>
+                            {% if good.discounted_price %}
+                                <div class="purchase-form-prices-row">
+                                    <div class="purchase-form-prices-row__label">Со скидкой</div>
+                                    <div class="purchase-form-prices-row__value">{{ good.discounted_price }} ₽</div>
+                                </div>
+                            {% endif %}
+                            <div class="purchase-form-prices-row summ">
+                                <div class="purchase-form-prices-row__label">Итого</div>
+                                {% if good.discounted_price %}
+                                    <div class="purchase-form-prices-row__value">{{ good.discounted_price }} ₽</div>
+                                {% else %}
+                                    <div class="purchase-form-prices-row__value">{{ good.price }} ₽</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-12 col-md pb-md-3 px-md-3">
+
+                    <form id="purchase_form" method="post" action="{% url 'shop:purchase' good.pk %}" class="row">
+                        {% csrf_token %}
+                        {{ form.method }}
+                        <input type="hidden" name="purchase">
+
+                        <div class="col-12">
+
+                            <div class="purchase-step-heading"><span
+                                    class="purchase-step-heading_num">1 шаг</span>Выберите удобный способ оплаты
+                            </div>
+                            <div class="mb-1">
+                            </div>
+
+                            <div class="row mb-5">
+                                <div class="col-6 col-lg-4 col-xl-3 mb-3">
+                                    <div class="purchase-paymethod selected" data-payment="qiwi">
+                                        <div class="purchase-paymethod_logo"><img
+                                                src="{% static 'img/paylogo-qiwi.webp' %}"
+                                                alt="QIWI">
+                                        </div>
+                                        <div class="purchase-paymethod_div">
+                                            <div class="purchase-paymethod_div__name">QIWI</div>
+                                            <div class="purchase-paymethod_div__info">Без комиссии</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-4 col-xl-3 mb-3">
+                                    <div class="purchase-paymethod" data-payment="yoomoney">
+                                        <div class="purchase-paymethod_logo"><img
+                                                src="{% static 'img/paylogo-yumoney-3.webp' %}"
+                                                alt="YooMoney">
+                                        </div>
+                                        <div class="purchase-paymethod_div">
+                                            <div class="purchase-paymethod_div__name">YooMoney</div>
+                                            <div class="purchase-paymethod_div__info">Без комиссии</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-4 col-xl-3 mb-3">
+                                    <div class="purchase-paymethod" data-payment="balance">
+                                        <div class="purchase-paymethod_logo"><img
+                                                src="{% static 'img/balance.png' %}"
+                                                alt="Баланс">
+                                        </div>
+                                        <div class="purchase-paymethod_div">
+                                            <div class="purchase-paymethod_div__name">Баланс</div>
+                                            <div class="purchase-paymethod_div__info">Без комиссии</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="purchase-step-heading"><span class="purchase-step-heading_num">2 шаг</span>Введите
+                                    промокод
+                                </div>
+
+                                <div class="purchase-step-info">
+                                    Если у вас есть промокод, введите его в поле ниже.
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="{{ form.promo.id_for_label }}">Промокод</label>
+                                    <div class="purchase-promo">
+                                        {{ form.promo }}
+                                        <i class="fas fa-spinner fa-spin purchase-promo_spinner d-none"></i>
+                                        <div class="valid-feedback"></div>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-auto my-3">
+                            <button type="submit"  class="btn btn-lg btn-success w-100">
+                                Оформить покупку
+                            </button>
+
+                            <div class="purchase-terms">
+                                Я ознакомлен с <a href="{% url 'shop:confidentiality' %}" target="_blank">пользовательским
+                                соглашением</a>, описанием товара, <a href="{% url 'shop:privacy' %}"
+                                                                      target="_blank">политикой конфиденциальности</a> и
+                                даю согласие на обработку персональных данных.
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </section>
+
+    </div>
+{% endblock %}

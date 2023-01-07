@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if order.status == 'waiting' %}
+        {{ order.good.name }} - ожидание оплаты
+    {% else %}
+        Заказ {{ order.slug }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <section class="container page-header">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'shop:index' %}">Главная</a></li>
+                <li class="breadcrumb-item"><a href="{{ order.good.get_absolute_url }}">{{ order.good.name }}</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Заказ {{ order.slug }}</li>
+            </ol>
+        </nav>
+
+        <h1>Заказ {{ order.slug }}</h1>
+
+    </section>
+
+    {% if order.status == 'waiting' %}
+        <section class="container body-bg wrapper mb-5">
+            <div class="row">
+                <div class="col-12 col-md-3">
+
+                    <div class="purchase-info">
+                        <div class="purchase-info_cover">
+                            <img src="{{ order.good.thumbnail.url }}"
+                                 class="purchase-info_cover__img" alt="{{ order.good.name }}">
+                        </div>
+                        <div class="purchase-info_product">
+                            <div class="purchase-info_product__name">{{ order.good.name }}</div>
+                            {% if order.good.subcategory %}
+                                <div class="purchase-info_product__info">
+                                    {{ order.good.subcategory.name }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="purchase-form-prices">
+                            <div class="purchase-form-prices-row {% if order.discounted_price %} oldprice {% endif %}">
+                                <div class="purchase-form-prices-row__label">Цена</div>
+                                <div class="purchase-form-prices-row__value">
+                                    {{ order.price }} ₽
+                                </div>
+                            </div>
+                            {% if order.discounted_price %}
+                                <div class="purchase-form-prices-row">
+                                    <div class="purchase-form-prices-row__label">Со скидкой</div>
+                                    <div class="purchase-form-prices-row__value">{{ order.discounted_price }} ₽
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if order.promo %}
+                                <div class="purchase-form-prices-row promo">
+                                    <div class="purchase-form-prices-row__label">Промокод</div>
+                                    <div class="purchase-form-prices-row__value">-{{ order.promo.discount }}%</div>
+                                </div>
+                            {% endif %}
+                            <div class="purchase-form-prices-row summ">
+                                <div class="purchase-form-prices-row__label">Итого</div>
+                                <div class="purchase-form-prices-row__value">{{ order.get_good_price }} ₽</div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-12 col-md pb-md-3 px-md-3">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="purchase-pay-steps">
+
+                                <div class="purchase-pay-steps_heading">Ожидание оплаты</div>
+
+                                <ul>
+                                    <li>
+                                        <div class="">
+                                            <i class="fas fa-lg fa-check text-success"></i>Покупка оформлена
+                                        </div>
+                                        <div class="purchase-pay-steps_additional">
+                                            <div>
+                                                Номер заказа: <b>{{ order.slug }}</b>
+                                            </div>
+                                            <div>
+                                                Email: <b>{{ order.user.email }}</b>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="">
+                                            <i class="fas fa-lg fa-spinner fa-spin text-muted"></i>Оплатите покупку
+                                        </div>
+                                        <div class="purchase-pay-steps_additional">
+                                            <a href="{{ order.pay_url }}"
+                                               class="btn btn-sm btn-success" target="_blank">Перейти к оплате</a>
+                                        </div>
+                                    </li>
+                                    <li><i class="fas fa-lg fa-spinner fa-spin text-muted"></i>Проверка оплаты занимает
+                                        до {% widthratio config.CHECK_PAYMENTS_TIMEOUT 60 1 %} мин. времени
+                                    </li>
+                                </ul>
+                                <div class="purchase-pay-steps_info">
+                                    Есть вопрос? Пожалуйста обратитесь в <a style="opacity: .7"
+                                                                            href="{% url 'shop:support' %}">поддержку</a>.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    {% else %}
+        <section class="container">
+            <div class="row">
+
+                <div class="col-12 col-xl-3">
+
+                    <div class="wrapper-container">
+                        <div class="row">
+                            <div class="col">
+                                <div class="ticket">
+
+                                    <div class="ticket-label">
+                                        <i class="fa fa-check text-success mr-2"></i>ОПЛАЧЕНО
+                                        <div class="small mt-1">
+                                            ЧЕК ПОКУПКИ
+                                        </div>
+                                        <hr>
+                                    </div>
+
+                                    <table>
+                                        <tr>
+                                            <td class="pr-4">Заказ</td>
+                                            <td><b>{{ order.slug }}</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="pr-4">Время</td>
+                                            <td>{{ order.created_at|date:'d.m.Y H:i:s' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="pr-4">Email</td>
+                                            <td>
+                                                {{ order.user.email }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="pr-4">Сумма</td>
+                                            <td>{{ order.get_good_price }} ₽</td>
+                                        </tr>
+                                        {% if order.promo %}
+                                            <tr>
+                                                <td class="pr-4">Промокод</td>
+                                                <td>{{ order.promo.promo }} (-{{ order.promo.discount }}%)</td>
+                                            </tr>
+                                        {% endif %}
+                                    </table>
+
+                                    <div class="ticket-text">
+                                        <hr>
+                                        {{ order.good.name }}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-12 col-xl-9">
+
+                    <div class="wrapper-container">
+
+                        <div class="row">
+                            <div class="col-12 col-lg-3 d-flex justify-content-center">
+                                <div class="game-card-simple">
+                                    <img src="{{ order.good.thumbnail.url }}" class="game-card-simple_cover"
+                                         alt="{{ order.good.name }}">
+                                    <div class="game-card-simple_name">{{ order.good.name }}</div>
+                                    <div class="game-card-simple_price">{{ order.get_good_price }} ₽</div>
+                                </div>
+
+                            </div>
+
+                            <div class="col">
+                                <div class="purchase-done-key">
+                                    <div class="purchase-done-key-heading">
+                                        Ваш товар
+                                    </div>
+                                    <div class="purchase-done-key-content">
+                                        {% autoescape off %}
+                                            {{ order.product }}
+                                        {% endautoescape %}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% if is_gifts %}
+                        <div class="row">
+                            <div class="col">
+                                <div class="wrapper-container">
+                                    <div class="done-info-block">
+                                        <div class="done-info-block-item-info">
+                                            <i class="fas fa-info-circle"></i>Вы знали, что можете получить приз за свою
+                                            покупку?
+                                        </div>
+                                        <div class="done-info-block-item gifts">
+                                            <a href="{% url 'shop:gift' %}" target="_blank"><i
+                                                    class="fas fa-gift"></i>Подарки</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </section>
+    {% endif %}
+
+{% endblock %}
