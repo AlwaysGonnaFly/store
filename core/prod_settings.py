@@ -1,5 +1,8 @@
 from pathlib import Path
 
+from pyqiwip2p import QiwiP2P
+from yoomoney import Client
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-p&*#$YY(*H$jrphf+*jdr*o@wgkil%f4w@(sjr^0ei4ims590!y3@wp@w6o5g6'
 
@@ -19,3 +22,11 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+
+QIWI_SECRET_KEY = 'KEY'
+P2P = QiwiP2P(auth_key=QIWI_SECRET_KEY)
+
+YOOMONEY_WALLET = 'WALLET'
+YOOMONEY_TOKEN = 'TOKEN'
+YOOMONEY_CLIENT = Client(token=YOOMONEY_TOKEN)
