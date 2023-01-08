@@ -6,10 +6,10 @@ from yoomoney import Client
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-p&*#$YY(*H$jrphf+*jdr*o@wgkil%f4w@(sjr^0ei4ims590!y3@wp@w6o5g6'
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
+    '127.0.0.1', 'вашip',
 ]
 
 DATABASES = {
