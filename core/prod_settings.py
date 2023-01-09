@@ -23,7 +23,6 @@ DATABASES = {
     }
 }
 
-
 QIWI_SECRET_KEY = 'KEY'
 P2P = QiwiP2P(auth_key=QIWI_SECRET_KEY)
 
