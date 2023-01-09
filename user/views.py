@@ -30,7 +30,6 @@ from smtplib import SMTPException
 
 
 @ratelimit(key='ip', method='POST', block=True, rate='3/10m')
-@ratelimit(key='post:email', block=True, rate='1/5m')
 def auth(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse('user:profile'))
